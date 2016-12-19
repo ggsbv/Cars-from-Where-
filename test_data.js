@@ -1,4 +1,4 @@
-[{
+module.exports = [{
   "color": "white",
   "make": "Volkswagen",
   "model": "Polo",
@@ -28,5 +28,4 @@
   "make": "Ford",
   "model": "Focus",
   "reg_number": "CF 75586"
-}
-];
+}];
