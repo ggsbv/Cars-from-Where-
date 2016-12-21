@@ -1,5 +1,40 @@
 const assert = require('assert');
 var test_data = require('./test_data.js');
+/* 	regNumConverter takes in a registration location identifier such as 'CL' and
+		returns the town name that the registration number represents
+*/
+var regNumConverter = function(regNum){
+
+	switch(regNum){
+		case 'CJ':
+		regNum = 'Paarl';
+		break;
+
+		case 'CY':
+		regNum = 'Bellville';
+		break;
+
+		case 'CL':
+		regNum = 'Stellenbosch';
+		break;
+
+		case 'CK':
+		regNum = 'Malmesbury';
+		break;
+
+		case 'CA':
+		regNum = 'Cape Town';
+		break;
+
+		case 'CF':
+		regNum = 'Kuilsriver';
+		break;
+
+		default:
+		regNum = regNum;
+	}
+	return regNum;
+}
 // What make is the most popular?
 function mostPopularCar(list){
 	var mostPopular = '';
@@ -52,7 +87,7 @@ var mostBlueCars = function(list){
 		// if blue, increment regID in outputList
 		if(currentColor === 'blue'){
 			var currentRegNum = currentObj.reg_number;
-			var regID = currentRegNum.slice(0,2);
+			var regID = currentRegNum.slice(0, 2);
 
 			if(outputList[regID] === undefined){
 				outputList[regID] = 1;
@@ -72,35 +107,75 @@ var mostBlueCars = function(list){
 		}
 	}
 	// Analyse regWithMostBlue and assign Town name
-	switch(regWithMostBlue){
-		case 'CJ':
-		townWithMostBlue = 'Paarl';
-		break;
+	townWithMostBlue = regNumConverter(regWithMostBlue);
 
-		case 'CY':
-		townWithMostBlue = 'Bellville';
-		break;
-
-		case 'CL':
-		townWithMostBlue = 'Stellenbosch';
-		break;
-
-		case 'CK':
-		townWithMostBlue = 'Malmesbury';
-		break;
-
-		case 'CA':
-		townWithMostBlue = 'Cape Town';
-		break;
-
-		case 'CF':
-		townWithMostBlue = 'Kuilsriver';
-		break;
-
-		default:
-		townWithMostBlue = regWithMostBlue;
-	}
 	return townWithMostBlue
+}
+
+// Which town has the fewest orange cars?
+var fewestOrangeCars = function(list){
+	var outputList = {};
+	var townWithFewestOrange = '';
+	var minNum = 1000000;
+	var regWithFewestOrange = '';
+
+	for(i = 0; i < list.length; i++){
+			var currentObj = list[i];
+			var currentColor = currentObj.color;
+
+			if(currentColor === 'orange'){
+				var currentRegNum = currentObj.reg_number;
+				var regID = currentRegNum.slice(0, 2);
+
+				if(outputList[regID] === undefined){
+					outputList[regID] = 1;
+				}
+				else{
+					outputList[regID]++;
+				}
+			}
+	}
+
+	for(currentReg in outputList){
+		currentTotal = outputList[currentReg];
+
+		if(currentTotal < minNum){
+			minNum = currentTotal;
+			regWithFewestOrange = currentReg;
+		}
+	}
+
+	townWithFewestOrange = regNumConverter(regWithFewestOrange);
+
+	return townWithFewestOrange;
+}
+
+// What is the most popular car overall?
+var mostPopularModel = function(list){
+	var outputList = {};
+	var maxTotal = 0;
+	var mostPopular = '';
+
+	for(i = 0; i < list.length; i++){
+		var currentObj = list[i];
+		var currentModel = currentObj.model;
+
+		if(outputList[currentModel] === undefined){
+			outputList[currentModel] = 1;
+		}
+		else{
+			outputList[currentModel]++;
+		}
+
+		for(currentModel in outputList){
+			currentTotal = outputList[currentModel];
+			if(currentTotal > maxTotal){
+				maxTotal = currentTotal;
+				mostPopular = currentModel;
+			}
+		}
+	}
+	return mostPopular;
 }
 
 // Test mostPopularCar
@@ -109,3 +184,7 @@ assert.deepEqual(mostPopularCar(test_data), 'Volkswagen', ['mostPopularCar Faile
 assert.deepEqual(nissansFromCK(test_data), 1, ['nissansFromCK Failed!']);
 // Test mostBlueCars
 assert.deepEqual(mostBlueCars(test_data), 'Cape Town');
+// Test fewestOrangeCars
+assert.deepEqual(fewestOrangeCars(test_data), 'Malmesbury');
+// Test mostPopularModel
+assert.deepEqual(mostPopularModel(test_data), 'Polo');
